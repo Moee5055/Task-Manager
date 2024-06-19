@@ -6,8 +6,6 @@ import {
 import ShowProfile from "./PopoverContent";
 import Profile from "./Profile";
 
-import { useToggleStore } from "@/store/useStore";
-
 const AvatarComponent = () => {
   return (
     <Popover>
