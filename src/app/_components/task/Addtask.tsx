@@ -1,5 +1,6 @@
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
+import { MyForm } from "./CreateTask";
 
 const AddTaskComponent: React.FC = () => {
   return (
@@ -11,7 +12,8 @@ const AddTaskComponent: React.FC = () => {
         />
       </DialogTrigger>
       <DialogContent className="w-[90vw] sm:max-w-md md:max-w-lg">
-        <p>moee</p>
+        {/* Create Task Form */}
+        <MyForm />
       </DialogContent>
     </Dialog>
   );
