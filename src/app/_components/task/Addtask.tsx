@@ -1,4 +1,9 @@
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { MyForm } from "./CreateTask";
 
@@ -12,6 +17,11 @@ const AddTaskComponent: React.FC = () => {
         />
       </DialogTrigger>
       <DialogContent className="w-[90vw] sm:max-w-md md:max-w-lg">
+        <DialogHeader>
+          <h2 className="text-sm md:text-lg font-bold tracking-wider text-muted-foreground">
+            Create New Task
+          </h2>
+        </DialogHeader>
         {/* Create Task Form */}
         <MyForm />
       </DialogContent>

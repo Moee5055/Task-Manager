@@ -15,9 +15,11 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { Checkbox } from "@/components/ui/checkbox";
 import { DialogClose } from "@radix-ui/react-dialog";
 import { DatePickerWithRange } from "@/app/_components/DateRangePicker";
 import { CreateTaskSchema } from "@/schema/CreateTaskSchema";
+import { Textarea } from "@/components/ui/textarea";
 
 type FormData = z.infer<typeof CreateTaskSchema>;
 
@@ -44,15 +46,18 @@ export function MyForm() {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="space-y-4 md:space-y-6">
+        className="space-y-3 md:space-y-5 2xl:space-y-6 tracking-wider">
         <FormField
           control={form.control}
           name="title"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Title</FormLabel>
               <FormControl>
-                <Input placeholder="Title" {...field} />
+                <Input
+                  placeholder="Title"
+                  {...field}
+                  className="text-sm sm:text-md 2xl:text-lg"
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -63,9 +68,12 @@ export function MyForm() {
           name="description"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Description</FormLabel>
               <FormControl>
-                <Input placeholder="Description" {...field} />
+                <Textarea
+                  placeholder="Take a note..."
+                  {...field}
+                  className="h-20 sm:h-40 2xl:h-50 text-sm sm:text-md 2xl:text-lg overflow-hidden"
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -76,17 +84,50 @@ export function MyForm() {
           name="date"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Date Range</FormLabel>
               <FormControl>
                 <DatePickerWithRange
                   value={field.value}
                   onChange={field.onChange}
                 />
               </FormControl>
-              <FormMessage />
             </FormItem>
           )}
         />
+        <FormField
+          control={form.control}
+          name="important"
+          render={({ field }) => (
+            <FormItem className="flex items-center space-x-3 space-y-0 border p-2 rounded">
+              <FormControl>
+                <Checkbox
+                  checked={field.value}
+                  onCheckedChange={field.onChange}
+                />
+              </FormControl>
+              <FormLabel className="text-sm sm:text-md 2xl:text-lg text-muted-foreground">
+                Important
+              </FormLabel>
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="completed"
+          render={({ field }) => (
+            <FormItem className="flex items-center space-x-3 space-y-0 border p-2 rounded">
+              <FormControl>
+                <Checkbox
+                  checked={field.value}
+                  onCheckedChange={field.onChange}
+                />
+              </FormControl>
+              <FormLabel className="text-sm sm:text-md 2xl:text-lg text-muted-foreground">
+                Completed
+              </FormLabel>
+            </FormItem>
+          )}
+        />
+
         <div className="w-full flex justify-between">
           <DialogClose asChild>
             <Button type="submit">Submit</Button>
