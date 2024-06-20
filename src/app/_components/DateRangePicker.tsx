@@ -74,7 +74,7 @@ export function DatePickerWithRange({
                 format(date.from, "LLL dd, y")
               )
             ) : (
-              <span className="text-sm sm:text-md 2xl:text-lg text-muted-foreground">
+              <span className="text-sm sm:text-md text-muted-foreground">
                 Pick a date
               </span>
             )}

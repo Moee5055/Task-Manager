@@ -35,10 +35,14 @@ export function MyForm() {
       },
       important: false,
       completed: false,
+      file: null,
     },
   });
 
+  const fileRef = form.register("file");
+
   const onSubmit = (data: FormData) => {
+    localStorage.setItem("data", JSON.stringify(data));
     console.log(data);
   };
 
@@ -56,7 +60,7 @@ export function MyForm() {
                 <Input
                   placeholder="Title"
                   {...field}
-                  className="text-sm sm:text-md 2xl:text-lg"
+                  className="text-sm sm:text-md"
                 />
               </FormControl>
               <FormMessage />
@@ -72,7 +76,22 @@ export function MyForm() {
                 <Textarea
                   placeholder="Take a note..."
                   {...field}
-                  className="h-20 sm:h-40 2xl:h-50 text-sm sm:text-md 2xl:text-lg overflow-hidden"
+                  className="h-20 sm:h-40 2xl:h-50 text-sm sm:text-md overflow-hidden"
+                />
+              </FormControl>
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="file"
+          render={() => (
+            <FormItem>
+              <FormControl>
+                <Input
+                  type="file"
+                  {...fileRef}
+                  className="text-muted-foreground"
                 />
               </FormControl>
               <FormMessage />
@@ -104,7 +123,7 @@ export function MyForm() {
                   onCheckedChange={field.onChange}
                 />
               </FormControl>
-              <FormLabel className="text-sm sm:text-md 2xl:text-lg text-muted-foreground">
+              <FormLabel className="text-sm sm:text-md text-muted-foreground">
                 Important
               </FormLabel>
             </FormItem>
@@ -121,7 +140,7 @@ export function MyForm() {
                   onCheckedChange={field.onChange}
                 />
               </FormControl>
-              <FormLabel className="text-sm sm:text-md 2xl:text-lg text-muted-foreground">
+              <FormLabel className="text-sm sm:text-md  text-muted-foreground">
                 Completed
               </FormLabel>
             </FormItem>
@@ -129,10 +148,7 @@ export function MyForm() {
         />
 
         <div className="w-full flex justify-between">
-          <DialogClose asChild>
-            <Button type="submit">Submit</Button>
-          </DialogClose>
-
+          <Button type="submit">Submit</Button>
           <DialogClose asChild>
             <Button variant={"destructive"}>Close</Button>
           </DialogClose>
