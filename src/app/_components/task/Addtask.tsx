@@ -22,7 +22,6 @@ const AddTaskComponent: React.FC = () => {
             Create New Task
           </h2>
         </DialogHeader>
-        {/* Create Task Form */}
         <MyForm />
       </DialogContent>
     </Dialog>

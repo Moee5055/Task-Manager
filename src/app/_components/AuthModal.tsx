@@ -29,7 +29,7 @@ const AuthModal = ({
   providerText,
 }: FormProps) => {
   return (
-    <Card className="w-[350px]">
+    <Card className="w-[90vw] sm:w-[400px]">
       <CardHeader className="text-center space-y-2">
         <CardTitle className="tracking-wider">{title}</CardTitle>
         <CardDescription>{desc}</CardDescription>
