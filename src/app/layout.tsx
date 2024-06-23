@@ -1,6 +1,5 @@
-import { ThemeProvider } from "./theme_provider";
 import type { Metadata } from "next";
-import { Poppins } from "next/font/google";
+
 import "./globals.css";
 import {
   ClerkProvider,
@@ -9,8 +8,6 @@ import {
   SignedOut,
   UserButton,
 } from "@clerk/nextjs";
-
-const font = Poppins({ subsets: ["latin"], weight: ["600"] });
 
 export const metadata: Metadata = {
   title: "Task Manager",
@@ -27,15 +24,7 @@ export default function RootLayout({
       <ClerkProvider>
         <html lang="en" suppressHydrationWarning={true}>
           <head />
-          <body className={font.className}>
-            <ThemeProvider
-              attribute="class"
-              defaultTheme="system"
-              enableSystem
-              disableTransitionOnChange>
-              {children}
-            </ThemeProvider>
-          </body>
+          <body>{children}</body>
         </html>
       </ClerkProvider>
     </>

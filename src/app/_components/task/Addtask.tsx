@@ -13,7 +13,7 @@ const AddTaskComponent: React.FC = () => {
       <DialogTrigger className="w-full px-4">
         <Input
           placeholder="Take a note..."
-          className="dark:bg-background/50 shadow-lg py-6 px-4 mx-auto max-w-xl"
+          className="dark:bg-background/50 bg-secondary shadow-lg py-6 px-4 mx-auto max-w-xl"
         />
       </DialogTrigger>
       <DialogContent className="w-[90vw] sm:max-w-md md:max-w-lg">

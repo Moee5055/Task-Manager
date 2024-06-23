@@ -34,7 +34,7 @@ const DisplayTask = () => {
         <Suspense fallback={<Skeleton />}>
           <Dialog>
             <DialogTrigger asChild>
-              <Card className="flex flex-col">
+              <Card className="flex flex-col bg-background/50 text-muted-foreground text-sm sm:text-md">
                 <CardHeader>
                   <CardTitle className="flex justify-between items-center">
                     Assignement

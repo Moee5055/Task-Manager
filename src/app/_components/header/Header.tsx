@@ -13,8 +13,8 @@ const Header = () => {
 
   return (
     <div
-      className="grid grid-cols-5 sm:grid-cols-6 items-center sticky top-0 
-    bg-secondary z-40 px-4 py-3 border-b shadow-lg">
+      className="grid grid-cols-5 sm:grid-cols-6 items-center sm:sticky top-0 
+    bg-zinc-300/50 dark:bg-secondary z-40 px-4 py-3 border-b shadow-lg">
       <div className="max-sm:hidden ">
         <Image
           src="/mylogo.png"
@@ -33,7 +33,7 @@ const Header = () => {
       </div>
       <div className="flex items-center col-span-3 sm:col-span-4 relative max-md:left-3">
         <InputText
-          className="bg-white/50 rounded-sm py-2 px-3 text-muted-foreground/50
+          className="bg-secondary rounded-sm py-2 px-3 text-muted-foreground/50
            dark:bg-background/50 w-full"
           placeholder="search ..."
         />

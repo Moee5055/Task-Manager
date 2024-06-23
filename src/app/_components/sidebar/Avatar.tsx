@@ -1,35 +1,40 @@
 "use client";
 
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import ShowProfile from "./PopoverContent";
-import Profile from "./Profile";
-import { useState } from "react";
+import { useAuth } from "@clerk/nextjs";
+import { useUser } from "@clerk/nextjs";
+import { useRouter } from "next/navigation";
+import { UserButton } from "@clerk/nextjs";
 
 const AvatarComponent = () => {
-  const [isLogin, setIsLogin] = useState(false);
+  const { userId } = useAuth();
+  const router = useRouter();
+  const { user } = useUser();
+
+  const handleClick = () => {
+    router.push("/sign-in");
+  };
+
   return (
-    <Popover>
-      <PopoverTrigger>
-        <div
-          className="flex items-center space-x-3 w-[140px] sm:w-[160px] md:w-[200px] mx-auto py-3
-           px-4 bg-background/50 shadow-lg rounded-lg cursor-pointer">
-          {isLogin ? (
-            <Profile name="kshitij jung shahi" />
-          ) : (
-            <div className="w-full">
-              <p className="text-sm sm:text-[0.9rem]">Login / SignUp</p>
-            </div>
-          )}
-        </div>
-      </PopoverTrigger>
-      <PopoverContent className="relative left-4 bg-background w-auto">
-        <ShowProfile />
-      </PopoverContent>
-    </Popover>
+    <>
+      <div
+        className="flex justify-center items-center w-[140px] sm:w-[160px] md:w-[200px] mx-auto py-3
+      px-4 bg-background/50 shadow-lg rounded-lg cursor-pointer">
+        {userId ? (
+          <div className="flex space-x-3 items-center">
+            <UserButton afterSignOutUrl="/tasks" />
+            <p className="text-sm sm:text-md text-muted-foreground font-semibold tracking-wider">
+              {user?.firstName}
+            </p>
+          </div>
+        ) : (
+          <p
+            className="cursor-pointer text-muted-foreground text-sm sm:text-md"
+            onClick={handleClick}>
+            Login / SignUp
+          </p>
+        )}
+      </div>
+    </>
   );
 };
 

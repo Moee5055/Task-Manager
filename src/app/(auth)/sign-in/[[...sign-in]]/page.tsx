@@ -1,5 +1,5 @@
-import LoginModal from "@/app/_components/AuthModal";
-import { SignIn } from "@clerk/nextjs";
+import { SignIn, ClerkLoaded, ClerkLoading } from "@clerk/nextjs";
+import { TbLoader2 } from "react-icons/tb";
 
 const LoginPage = () => {
   return (
@@ -11,8 +11,13 @@ const LoginPage = () => {
     //   linkText="Dont' have an account? click here "
     //   providerText="Login in"
     // />
-    <main className="min-h-screen flex justify-center items-center">
-      <SignIn path="/sign-in" />
+    <main className="min-h-screen flex justify-center items-center bg-gradient-to-r from-blue-500 to-sky-500">
+      <ClerkLoaded>
+        <SignIn path="/sign-in" routing="path" />
+      </ClerkLoaded>
+      <ClerkLoading>
+        <TbLoader2 className="animate-spin text-3xl text-white" />
+      </ClerkLoading>
     </main>
   );
 };
