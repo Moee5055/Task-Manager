@@ -11,7 +11,7 @@ export function ImageUpload() {
         <FileButton onChange={setFiles} accept="image/png,image/jpeg" multiple>
           {(props) => (
             <Button {...props}>
-              <FaImage className="text-muted-foreground h-5 w-5" />
+              <FaImage className="text-muted-foreground h-5 w-5 relative top-[3px]" />
             </Button>
           )}
         </FileButton>
