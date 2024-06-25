@@ -2,7 +2,7 @@
 
 import { ModeToggle } from "@/app/_components/Toogle";
 import Image from "next/image";
-import { InputText } from "primereact/inputtext";
+import { Input } from "@/components/ui/input";
 import { FaBars } from "react-icons/fa";
 import { IoSearch } from "react-icons/io5";
 import { useToggleStore } from "@/store/useStore";
@@ -32,8 +32,8 @@ const Header = () => {
         />
       </div>
       <div className="flex items-center col-span-3 sm:col-span-4 relative max-md:left-3">
-        <InputText
-          className="bg-secondary rounded-sm py-2 px-3 text-muted-foreground/50
+        <Input
+          className="bg-secondary rounded-sm py-2 px-3 text-muted-foreground
            dark:bg-background/50 w-full"
           placeholder="search ..."
         />

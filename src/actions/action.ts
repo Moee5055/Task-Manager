@@ -1,5 +1,5 @@
 "use server";
 
-export async function createTask(values: any) {
-  console.log(values);
+export async function createTask(formData: FormData) {
+  console.log(formData);
 }

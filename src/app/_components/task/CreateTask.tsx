@@ -9,7 +9,6 @@ import { Input } from "@/components/ui/input";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -20,6 +19,7 @@ import { DialogClose } from "@radix-ui/react-dialog";
 import { DatePickerWithRange } from "@/app/_components/DateRangePicker";
 import { CreateTaskSchema } from "@/schema/CreateTaskSchema";
 import { Textarea } from "@/components/ui/textarea";
+import { uploadFile } from "@/utils/fileupload";
 
 type FormData = z.infer<typeof CreateTaskSchema>;
 
@@ -41,9 +41,12 @@ export function MyForm() {
 
   const fileRef = form.register("file");
 
-  const onSubmit = (data: FormData) => {
-    localStorage.setItem("data", JSON.stringify(data));
-    console.log(data);
+  const onSubmit = async (data: FormData) => {
+    if (data.file && data.file.length > 0) {
+      const file = data.file[0];
+      const result = await uploadFile(file);
+      console.log(result);
+    }
   };
 
   return (
@@ -57,11 +60,7 @@ export function MyForm() {
           render={({ field }) => (
             <FormItem>
               <FormControl>
-                <Input
-                  placeholder="Title"
-                  {...field}
-                  className="text-sm sm:text-md"
-                />
+                <Input placeholder="Title" {...field} className="text-sm" />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -76,7 +75,7 @@ export function MyForm() {
                 <Textarea
                   placeholder="Take a note..."
                   {...field}
-                  className="h-20 sm:h-40 2xl:h-50 text-sm sm:text-md overflow-hidden"
+                  className="h-20 sm:h-40 2xl:h-50 text-sm overflow-hidden"
                 />
               </FormControl>
             </FormItem>
@@ -123,7 +122,7 @@ export function MyForm() {
                   onCheckedChange={field.onChange}
                 />
               </FormControl>
-              <FormLabel className="text-sm sm:text-md text-muted-foreground">
+              <FormLabel className="text-sm text-muted-foreground">
                 Important
               </FormLabel>
             </FormItem>
@@ -140,7 +139,7 @@ export function MyForm() {
                   onCheckedChange={field.onChange}
                 />
               </FormControl>
-              <FormLabel className="text-sm sm:text-md  text-muted-foreground">
+              <FormLabel className="text-sm text-muted-foreground">
                 Completed
               </FormLabel>
             </FormItem>

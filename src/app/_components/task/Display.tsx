@@ -1,4 +1,3 @@
-"use client";
 import {
   Card,
   CardContent,
@@ -6,20 +5,13 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { MdDelete } from "react-icons/md";
-import { TbPinnedFilled } from "react-icons/tb";
+import { DeleteIcon } from "./DeleteIcon";
+import PinnedComponent from "./Pinned";
 import { Skeleton } from "@/components/ui/skeleton";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Suspense } from "react";
-import { Input } from "@/components/ui/input";
+import EditModal from "./EditModal";
 
 const DisplayTask = () => {
   return (
@@ -38,10 +30,7 @@ const DisplayTask = () => {
                 <CardHeader>
                   <CardTitle className="flex justify-between items-center">
                     Assignement
-                    <TbPinnedFilled
-                      className="h-5 w-5 text-muted-foreground cursor-pointer"
-                      onClick={(e) => e.stopPropagation()}
-                    />
+                    <PinnedComponent />
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="flex-1">
@@ -53,11 +42,13 @@ const DisplayTask = () => {
                 </CardContent>
                 <CardFooter className="flex justify-between items-center">
                   <Button variant={"outline"}>completed</Button>
-                  <MdDelete className="h-5 w-5 text-muted-foreground hover:scale-125 cursor-pointer" />
+                  <DeleteIcon />
                 </CardFooter>
               </Card>
             </DialogTrigger>
-            <DialogContent></DialogContent>
+            <DialogContent>
+              <EditModal />
+            </DialogContent>
           </Dialog>
         </Suspense>
       </div>
