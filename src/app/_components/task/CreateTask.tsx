@@ -20,6 +20,7 @@ import { DatePickerWithRange } from "@/app/_components/DateRangePicker";
 import { CreateTaskSchema } from "@/schema/CreateTaskSchema";
 import { Textarea } from "@/components/ui/textarea";
 import { uploadFile } from "@/utils/fileupload";
+import { createTask } from "@/actions/action";
 
 type FormData = z.infer<typeof CreateTaskSchema>;
 
@@ -35,18 +36,11 @@ export function MyForm() {
       },
       important: false,
       completed: false,
-      file: null,
     },
   });
 
-  const fileRef = form.register("file");
-
   const onSubmit = async (data: FormData) => {
-    if (data.file && data.file.length > 0) {
-      const file = data.file[0];
-      const result = await uploadFile(file);
-      console.log(result);
-    }
+    await createTask(data);
   };
 
   return (
@@ -78,22 +72,6 @@ export function MyForm() {
                   className="h-20 sm:h-40 2xl:h-50 text-sm overflow-hidden"
                 />
               </FormControl>
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="file"
-          render={() => (
-            <FormItem>
-              <FormControl>
-                <Input
-                  type="file"
-                  {...fileRef}
-                  className="text-muted-foreground"
-                />
-              </FormControl>
-              <FormMessage />
             </FormItem>
           )}
         />

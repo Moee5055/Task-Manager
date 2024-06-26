@@ -5,6 +5,7 @@ import { FaImage } from "react-icons/fa6";
 
 export function ImageUpload() {
   const [files, setFiles] = useState<File[]>([]);
+
   return (
     <>
       <Group justify="center">
@@ -16,18 +17,6 @@ export function ImageUpload() {
           )}
         </FileButton>
       </Group>
-
-      {files.length > 0 && (
-        <Text size="sm" mt="sm">
-          Picked files:
-        </Text>
-      )}
-
-      <ul>
-        {files.map((file, index) => (
-          <li key={index}>{file.name}</li>
-        ))}
-      </ul>
     </>
   );
 }
