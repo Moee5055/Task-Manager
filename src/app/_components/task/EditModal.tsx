@@ -10,7 +10,7 @@ import { ImageUpload } from "./UploadImage";
 import { TbPinnedFilled } from "react-icons/tb";
 import { useEffect, useState } from "react";
 import { getTaskById } from "@/actions/action";
-import { CreateTaskSchema } from "@/schema/CreateTaskSchema";
+import { format, parseISO } from "date-fns";
 
 type Task = {
   id: string;
@@ -26,6 +26,41 @@ type Task = {
 const EditModal = ({ id }: { id: string }) => {
   const [data, setData] = useState<Task | null>(null);
 
+  const form = useForm({
+    defaultValues: {
+      title: "",
+      description: "",
+    },
+  });
+
+  const formatDate = (date: Date | string) => {
+    if (typeof date === "string") {
+      // Try to parse the string date
+      try {
+        return format(parseISO(date), "dd MMM 'at' h:mm a");
+      } catch (error) {
+        console.error("Error parsing date:", error);
+        return "Invalid Date";
+      }
+    } else if (date instanceof Date) {
+      // If it's already a Date object, just format it
+      return format(date, "dd MMM 'at' h:mm a");
+    } else {
+      return "Invalid Date";
+    }
+  };
+
+  const areDatesEqual = (date1: Date, date2: Date) => {
+    const d1 = new Date(date1);
+    const d2 = new Date(date2);
+    return d1.getTime() === d2.getTime();
+  };
+
+  const datesAreEqual =
+    data?.createdAt &&
+    data?.lastModified &&
+    areDatesEqual(data.createdAt, data.lastModified);
+
   useEffect(() => {
     async function getTask() {
       try {
@@ -34,6 +69,10 @@ const EditModal = ({ id }: { id: string }) => {
           return null;
         }
         setData(result);
+        form.reset({
+          title: result.title,
+          description: result.desc || "",
+        });
       } catch (err) {
         console.error("Error fetching data: ", err);
         setData(null);
@@ -42,13 +81,6 @@ const EditModal = ({ id }: { id: string }) => {
 
     getTask();
   }, [id]);
-
-  const form = useForm({
-    defaultValues: {
-      title: "",
-      description: "",
-    },
-  });
 
   return (
     <>
@@ -83,18 +115,31 @@ const EditModal = ({ id }: { id: string }) => {
             />
           </div>
           <div>
-            <p className="text-sm text-muted-foreground">
-              Task Date: 14 July - 16 July
-            </p>
+            {data?.from && (
+              <p className="text-sm text-muted-foreground">
+                Complete Time:{" "}
+                {data?.from && `${format(data.from, "dd MMM YYY")}`}
+                {data?.to && ` - ${format(data.to, "dd MMM YYY")}`}
+              </p>
+            )}
           </div>
           <div className="flex justify-between items-center">
             <Button
               size="sm"
-              className="bg-emerald-500 tracking-wider dark:text-white dark:hover:bg-emerald-600">
-              Completed
+              className={`${
+                data?.isCompleted ? "bg-emerald-500" : "bg-destructive"
+              } tracking-wider dark:text-white dark:hover:bg-secondary`}>
+              {data?.isCompleted ? "completed" : "incomplete"}
             </Button>
             <span className="text-sm text-muted-foreground">
-              Created-3:30pm
+              {datesAreEqual ? (
+                <span>created at: {formatDate(data.createdAt)}</span>
+              ) : (
+                <>
+                  {data?.lastModified &&
+                    `last modified: ${formatDate(data.lastModified)}`}
+                </>
+              )}
             </span>
           </div>
           <div className="flex justify-between items-center">
