@@ -9,8 +9,11 @@ import { IoMdColorFill } from "react-icons/io";
 import { ImageUpload } from "./UploadImage";
 import { TbPinnedFilled } from "react-icons/tb";
 import { useEffect, useState } from "react";
-import { getTaskById } from "@/actions/action";
+import { getTaskById, updateTask } from "@/actions/action";
 import { format, parseISO } from "date-fns";
+import { CreateTaskSchema } from "@/schema/CreateTaskSchema";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 type Task = {
   id: string;
@@ -23,15 +26,29 @@ type Task = {
   isImportant: boolean;
   isCompleted: boolean;
 };
+
 const EditModal = ({ id }: { id: string }) => {
   const [data, setData] = useState<Task | null>(null);
 
-  const form = useForm({
+  const form = useForm<z.infer<typeof CreateTaskSchema>>({
+    resolver: zodResolver(CreateTaskSchema),
     defaultValues: {
       title: "",
       description: "",
+      date: {
+        from: null,
+        to: null,
+      },
+      important: false,
+      completed: false,
     },
   });
+
+  const onSubmit = async (values: z.infer<typeof CreateTaskSchema>) => {
+    console.log(values);
+
+    await updateTask({ id, values });
+  };
 
   const formatDate = (date: Date | string) => {
     if (typeof date === "string") {
@@ -72,6 +89,12 @@ const EditModal = ({ id }: { id: string }) => {
         form.reset({
           title: result.title,
           description: result.desc || "",
+          date: {
+            from: result.from,
+            to: result.to,
+          },
+          completed: result.isCompleted,
+          important: result.isImportant,
         });
       } catch (err) {
         console.error("Error fetching data: ", err);
@@ -85,7 +108,9 @@ const EditModal = ({ id }: { id: string }) => {
   return (
     <>
       <Form {...form}>
-        <form className="space-y-4 sm:space-y-6">
+        <form
+          className="space-y-4 sm:space-y-6"
+          onSubmit={form.handleSubmit(onSubmit)}>
           <div className="space-y-3 sm:space-y-4">
             <FormField
               control={form.control}
@@ -146,7 +171,24 @@ const EditModal = ({ id }: { id: string }) => {
             <div className="flex space-x-3 items-center">
               <ImageUpload />
               <IoMdColorFill className="h-6 w-6 text-muted-foreground relative -top-[2px]" />
-              <TbPinnedFilled className="h-6 w-6 text-muted-foreground" />
+              <FormField
+                control={form.control}
+                name="important"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <TbPinnedFilled
+                        className={`h-6 w-6 cursor-pointer transition-colors duration-200 ${
+                          field.value
+                            ? "text-black dark:text-yellow-500"
+                            : "text-muted-foreground dark:hover:text-yellow-300 hover:text-black"
+                        }`}
+                        onClick={() => field.onChange(!field.value)}
+                      />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
             </div>
             <Button type="submit" size="sm">
               Update Task

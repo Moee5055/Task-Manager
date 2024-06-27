@@ -2,8 +2,12 @@
 import prisma from "@/db";
 import { z } from "zod";
 import { CreateTaskSchema } from "@/schema/CreateTaskSchema";
-import { error } from "console";
 import { revalidatePath } from "next/cache";
+
+type UpdateTask = {
+  id: string;
+  values: z.infer<typeof CreateTaskSchema>;
+};
 
 export async function createTask(data: z.infer<typeof CreateTaskSchema>) {
   const validateFields = CreateTaskSchema.safeParse(data);
@@ -55,4 +59,27 @@ export async function getTaskById(id: string) {
   }
 
   return data;
+}
+
+export async function updateTask({ id, values }: UpdateTask) {
+  const {
+    title,
+    description,
+    completed,
+    important,
+    date: { from, to },
+  } = values;
+  const result = await prisma.task.update({
+    where: {
+      id,
+    },
+    data: {
+      title,
+      desc: description,
+      isImportant: important,
+      isCompleted: completed,
+    },
+  });
+
+  revalidatePath("/tasks");
 }

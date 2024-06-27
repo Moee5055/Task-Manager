@@ -39,17 +39,23 @@ const DisplayTask = async () => {
                     <CardHeader>
                       <CardTitle className="flex justify-between items-center">
                         {title}
-                        <PinnedComponent />
+                        <PinnedComponent completed={isCompleted} />
                       </CardTitle>
                     </CardHeader>
                     <CardContent className="flex-1">
-                      <p>{desc}</p>
+                      <p className="break-words whitespace-normal">
+                        {desc && desc.length > 25
+                          ? `${desc.slice(0, 25)} ...`
+                          : desc}
+                      </p>
                     </CardContent>
                     <CardFooter className="flex justify-between items-center">
                       <Button
-                        variant={"outline"}
-                        className={`${!isCompleted && "bg-destructive"}`}>
-                        {isCompleted ? "completed" : "Incomplete"}
+                        size="sm"
+                        className={`${
+                          isCompleted ? "bg-emerald-500" : "bg-destructive"
+                        } tracking-wider dark:text-white dark:hover:bg-secondary`}>
+                        {isCompleted ? "completed" : "incomplete"}
                       </Button>
                       <DeleteIcon />
                     </CardFooter>
