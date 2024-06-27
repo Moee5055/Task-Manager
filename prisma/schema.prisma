@@ -18,6 +18,6 @@ model Task {
   lastModified DateTime  @updatedAt
   from         DateTime?
   to           DateTime?
-  isImportant  Boolean?
-  isCompleted  Boolean?
+  isImportant  Boolean
+  isCompleted  Boolean
 }

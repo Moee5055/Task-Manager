@@ -8,8 +8,41 @@ import { Textarea } from "@/components/ui/textarea";
 import { IoMdColorFill } from "react-icons/io";
 import { ImageUpload } from "./UploadImage";
 import { TbPinnedFilled } from "react-icons/tb";
+import { useEffect, useState } from "react";
+import { getTaskById } from "@/actions/action";
+import { CreateTaskSchema } from "@/schema/CreateTaskSchema";
 
-const EditModal = () => {
+type Task = {
+  id: string;
+  title: string;
+  desc: string | null;
+  createdAt: Date;
+  lastModified: Date;
+  from: Date | null;
+  to: Date | null;
+  isImportant: boolean;
+  isCompleted: boolean;
+};
+const EditModal = ({ id }: { id: string }) => {
+  const [data, setData] = useState<Task | null>(null);
+
+  useEffect(() => {
+    async function getTask() {
+      try {
+        const result = await getTaskById(id);
+        if (!result) {
+          return null;
+        }
+        setData(result);
+      } catch (err) {
+        console.error("Error fetching data: ", err);
+        setData(null);
+      }
+    }
+
+    getTask();
+  }, [id]);
+
   const form = useForm({
     defaultValues: {
       title: "",

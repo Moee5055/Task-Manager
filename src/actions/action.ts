@@ -3,6 +3,7 @@ import prisma from "@/db";
 import { z } from "zod";
 import { CreateTaskSchema } from "@/schema/CreateTaskSchema";
 import { error } from "console";
+import { revalidatePath } from "next/cache";
 
 export async function createTask(data: z.infer<typeof CreateTaskSchema>) {
   const validateFields = CreateTaskSchema.safeParse(data);
@@ -34,5 +35,25 @@ export async function createTask(data: z.infer<typeof CreateTaskSchema>) {
     return { message: "error" };
   }
 
+  revalidatePath("/tasks");
   return null;
+}
+
+export async function getTasks() {
+  const data = await prisma.task.findMany();
+  return data;
+}
+
+export async function getTaskById(id: string) {
+  const data = await prisma.task.findUnique({
+    where: {
+      id,
+    },
+  });
+  if (!data) {
+    return null;
+  }
+  console.log(data);
+
+  return data;
 }
