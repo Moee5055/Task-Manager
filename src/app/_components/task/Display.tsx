@@ -18,7 +18,11 @@ const DisplayTask = async () => {
   const data = await getTasks();
 
   if (data.length < 1) {
-    return <div>No Task Added</div>;
+    return (
+      <div className="flex justify-center items-center pt-10 sm:pt-40">
+        <h1 className="font-bold text-2xl">No Tasks to Show</h1>
+      </div>
+    );
   }
   return (
     <div className="flex flex-col space-y-3 px-4">
@@ -57,7 +61,7 @@ const DisplayTask = async () => {
                         } tracking-wider dark:text-white dark:hover:bg-secondary`}>
                         {isCompleted ? "completed" : "incomplete"}
                       </Button>
-                      <DeleteIcon />
+                      <DeleteIcon id={id} />
                     </CardFooter>
                   </Card>
                 </DialogTrigger>

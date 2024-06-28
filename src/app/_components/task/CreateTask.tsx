@@ -1,6 +1,6 @@
 "use client";
 
-import * as React from "react";
+import { useEffect } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -24,7 +24,7 @@ import { createTask } from "@/actions/action";
 
 type FormData = z.infer<typeof CreateTaskSchema>;
 
-export function MyForm() {
+export function MyForm({ onClose }: { onClose: () => void }) {
   const form = useForm<FormData>({
     resolver: zodResolver(CreateTaskSchema),
     defaultValues: {
@@ -40,8 +40,21 @@ export function MyForm() {
   });
 
   const onSubmit = async (data: FormData) => {
-    await createTask(data);
+    try {
+      await createTask(data);
+      onClose();
+    } catch (error) {
+      console.error("Error creating task:", error);
+    }
   };
+
+  const { isSubmitting, isSubmitSuccessful } = form.formState;
+
+  useEffect(() => {
+    if (isSubmitSuccessful) {
+      onClose();
+    }
+  }, [isSubmitSuccessful, onClose]);
 
   return (
     <Form {...form}>
@@ -123,9 +136,10 @@ export function MyForm() {
             </FormItem>
           )}
         />
-
         <div className="w-full flex justify-between">
-          <Button type="submit">Submit</Button>
+          <Button type="submit" disabled={isSubmitting}>
+            {isSubmitting ? "Submitting..." : "Submit"}
+          </Button>
           <DialogClose asChild>
             <Button variant={"destructive"}>Close</Button>
           </DialogClose>

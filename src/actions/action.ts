@@ -84,3 +84,18 @@ export async function updateTask({ id, values }: UpdateTask) {
 
   revalidatePath("/tasks");
 }
+
+export async function deleteTask(id: string) {
+  const result = await prisma.task.delete({
+    where: {
+      id,
+    },
+  });
+
+  if (!result) {
+    return { message: "Error deleting Task" };
+  }
+
+  revalidatePath("/tasks");
+  return { message: "Succesfully Task Deleted" };
+}

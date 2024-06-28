@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Dialog,
   DialogContent,
@@ -5,10 +7,13 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
+import { useState } from "react";
+import { MyForm } from "./CreateTask";
 
-const AddTaskComponent = ({ children }: { children: React.ReactNode }) => {
+const AddTaskComponent = () => {
+  const [open, setIsOpen] = useState(false);
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setIsOpen}>
       <DialogTrigger className="w-full px-4">
         <Input
           placeholder="Take a note..."
@@ -21,7 +26,7 @@ const AddTaskComponent = ({ children }: { children: React.ReactNode }) => {
             Create New Task
           </h2>
         </DialogHeader>
-        {children}
+        <MyForm onClose={() => setIsOpen(!open)} />
       </DialogContent>
     </Dialog>
   );

@@ -14,6 +14,7 @@ import { format, parseISO } from "date-fns";
 import { CreateTaskSchema } from "@/schema/CreateTaskSchema";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { DialogClose } from "@/components/ui/dialog";
 
 type Task = {
   id: string;
@@ -75,8 +76,6 @@ const EditModal = ({ id }: { id: string }) => {
     data?.createdAt &&
     data?.lastModified &&
     areDatesEqual(data.createdAt, data.lastModified);
-
-  const toogleImportantValue = (value: boolean) => {};
 
   useEffect(() => {
     async function getTask() {
@@ -151,9 +150,21 @@ const EditModal = ({ id }: { id: string }) => {
           <div className="flex justify-between items-center">
             <Button
               size="sm"
+              type="button"
               className={`${
                 data?.isCompleted ? "bg-emerald-500" : "bg-destructive"
-              } tracking-wider dark:text-white dark:hover:bg-secondary`}>
+              } tracking-wider dark:text-white dark:hover:bg-secondary`}
+              onClick={() => {
+                form.setValue("completed", !data?.isCompleted);
+                const newValue = form.getValues("completed");
+                console.log(newValue);
+                setData((prevData) => {
+                  if (prevData) {
+                    return { ...prevData, isCompleted: newValue };
+                  }
+                  return prevData;
+                });
+              }}>
               {data?.isCompleted ? "completed" : "incomplete"}
             </Button>
             <span className="text-sm text-muted-foreground">
@@ -199,9 +210,11 @@ const EditModal = ({ id }: { id: string }) => {
                 )}
               />
             </div>
-            <Button type="submit" size="sm">
-              Update Task
-            </Button>
+            <DialogClose asChild>
+              <Button type="submit" size="sm">
+                Update Task
+              </Button>
+            </DialogClose>
           </div>
         </form>
       </Form>
