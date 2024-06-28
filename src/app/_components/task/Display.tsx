@@ -39,7 +39,7 @@ const DisplayTask = async () => {
                     <CardHeader>
                       <CardTitle className="flex justify-between items-center">
                         {title}
-                        <PinnedComponent completed={isCompleted} />
+                        <PinnedComponent completed={isImportant} />
                       </CardTitle>
                     </CardHeader>
                     <CardContent className="flex-1">

@@ -45,8 +45,6 @@ const EditModal = ({ id }: { id: string }) => {
   });
 
   const onSubmit = async (values: z.infer<typeof CreateTaskSchema>) => {
-    console.log(values);
-
     await updateTask({ id, values });
   };
 
@@ -78,6 +76,8 @@ const EditModal = ({ id }: { id: string }) => {
     data?.lastModified &&
     areDatesEqual(data.createdAt, data.lastModified);
 
+  const toogleImportantValue = (value: boolean) => {};
+
   useEffect(() => {
     async function getTask() {
       try {
@@ -103,7 +103,18 @@ const EditModal = ({ id }: { id: string }) => {
     }
 
     getTask();
-  }, [id]);
+  }, [id, form]);
+
+  // const toggleImportantValue = () => {
+  //   const newValue = !form.getValues("important");
+  //   form.setValue("important", newValue);
+  //  setData((prevData) => {
+  //    if (prevData) {
+  //      return { ...prevData, isImportant: newValue };
+  //    }
+  //    return prevData;
+  //  });
+  // }
 
   return (
     <>
@@ -179,11 +190,20 @@ const EditModal = ({ id }: { id: string }) => {
                     <FormControl>
                       <TbPinnedFilled
                         className={`h-6 w-6 cursor-pointer transition-colors duration-200 ${
-                          field.value
+                          data?.isImportant
                             ? "text-black dark:text-yellow-500"
                             : "text-muted-foreground dark:hover:text-yellow-300 hover:text-black"
                         }`}
-                        onClick={() => field.onChange(!field.value)}
+                        onClick={() => {
+                          const newValue = !field.value;
+                          field.onChange(newValue);
+                          setData((prevData) => {
+                            if (prevData) {
+                              return { ...prevData, isImportant: newValue };
+                            }
+                            return prevData;
+                          });
+                        }}
                       />
                     </FormControl>
                   </FormItem>

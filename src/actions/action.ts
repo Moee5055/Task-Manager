@@ -69,6 +69,7 @@ export async function updateTask({ id, values }: UpdateTask) {
     important,
     date: { from, to },
   } = values;
+
   const result = await prisma.task.update({
     where: {
       id,
