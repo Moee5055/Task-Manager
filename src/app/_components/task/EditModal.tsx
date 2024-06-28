@@ -105,17 +105,6 @@ const EditModal = ({ id }: { id: string }) => {
     getTask();
   }, [id, form]);
 
-  // const toggleImportantValue = () => {
-  //   const newValue = !form.getValues("important");
-  //   form.setValue("important", newValue);
-  //  setData((prevData) => {
-  //    if (prevData) {
-  //      return { ...prevData, isImportant: newValue };
-  //    }
-  //    return prevData;
-  //  });
-  // }
-
   return (
     <>
       <Form {...form}>
