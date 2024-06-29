@@ -6,6 +6,7 @@ import { FaTasks } from "react-icons/fa";
 import { MdOutlineIncompleteCircle } from "react-icons/md";
 import { CheckCircledIcon } from "@radix-ui/react-icons";
 import { TbPinnedFilled } from "react-icons/tb";
+import { FaImage } from "react-icons/fa6";
 
 type Link = {
   id: number;
@@ -39,6 +40,12 @@ const links: Link[] = [
     href: "/important",
     link: "Important",
     icon: <TbPinnedFilled className="h-5 w-5" />,
+  },
+  {
+    id: 4,
+    href: "/images",
+    link: "Images",
+    icon: <FaImage className="h-5 w-5" />,
   },
 ];
 

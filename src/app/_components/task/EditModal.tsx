@@ -15,6 +15,7 @@ import { CreateTaskSchema } from "@/schema/CreateTaskSchema";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { DialogClose } from "@/components/ui/dialog";
+import { getFile } from "@/utils/fileupload";
 
 type Task = {
   id: string;
@@ -28,8 +29,15 @@ type Task = {
   isCompleted: boolean;
 };
 
+type FileObject = {
+  id: string;
+  url: string;
+};
+
 const EditModal = ({ id }: { id: string }) => {
   const [data, setData] = useState<Task | null>(null);
+  const [fileDataFetched, setFileDataFetched] = useState(false);
+  const [images, setImages] = useState<FileObject[] | undefined>([]);
 
   const form = useForm<z.infer<typeof CreateTaskSchema>>({
     resolver: zodResolver(CreateTaskSchema),
@@ -103,6 +111,21 @@ const EditModal = ({ id }: { id: string }) => {
 
     getTask();
   }, [id, form]);
+
+  // useEffect(() => {
+  //   async function fetchUploadFile() {
+  //     if (!fileDataFetched) {
+  //       try {
+  //         const data = await getFile(id);
+  //         setFileDataFetched(true);
+  //         setImages(data);
+  //       } catch (error) {
+  //         console.error("Error fetching file:", error);
+  //       }
+  //     }
+  //   }
+  //   fetchUploadFile();
+  // }, [id, fileDataFetched]);
 
   return (
     <>
@@ -180,7 +203,7 @@ const EditModal = ({ id }: { id: string }) => {
           </div>
           <div className="flex justify-between items-center">
             <div className="flex space-x-3 items-center">
-              <ImageUpload />
+              <ImageUpload id={id} />
               <IoMdColorFill className="h-6 w-6 text-muted-foreground relative -top-[2px]" />
               <FormField
                 control={form.control}
