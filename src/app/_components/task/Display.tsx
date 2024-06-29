@@ -11,7 +11,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Suspense } from "react";
-import EditModal from "./EditModal";
+import DispalyEditModal from "./DisplayIEditModal";
 import { getTasks } from "@/actions/action";
 
 const DisplayTask = async () => {
@@ -66,7 +66,7 @@ const DisplayTask = async () => {
                   </Card>
                 </DialogTrigger>
                 <DialogContent>
-                  <EditModal id={id} />
+                  <DispalyEditModal id={id} />
                 </DialogContent>
               </Dialog>
             );

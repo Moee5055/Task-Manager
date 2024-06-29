@@ -1,6 +1,5 @@
 "use client";
 
-import { useEffect } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -19,7 +18,6 @@ import { DialogClose } from "@radix-ui/react-dialog";
 import { DatePickerWithRange } from "@/app/_components/DateRangePicker";
 import { CreateTaskSchema } from "@/schema/CreateTaskSchema";
 import { Textarea } from "@/components/ui/textarea";
-import { uploadFile } from "@/utils/fileupload";
 import { createTask } from "@/actions/action";
 
 type FormData = z.infer<typeof CreateTaskSchema>;
@@ -39,22 +37,18 @@ export function MyForm({ onClose }: { onClose: () => void }) {
     },
   });
 
+  const { isSubmitting } = form.formState;
+
   const onSubmit = async (data: FormData) => {
     try {
-      await createTask(data);
-      onClose();
+      const result = await createTask(data);
+      if (result?.message === "success") {
+        onClose();
+      }
     } catch (error) {
       console.error("Error creating task:", error);
     }
   };
-
-  const { isSubmitting, isSubmitSuccessful } = form.formState;
-
-  useEffect(() => {
-    if (isSubmitSuccessful) {
-      onClose();
-    }
-  }, [isSubmitSuccessful, onClose]);
 
   return (
     <Form {...form}>

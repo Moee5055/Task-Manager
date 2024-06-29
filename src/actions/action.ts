@@ -40,7 +40,7 @@ export async function createTask(data: z.infer<typeof CreateTaskSchema>) {
   }
 
   revalidatePath("/tasks");
-  return null;
+  return { message: "success" };
 }
 
 export async function getTasks() {

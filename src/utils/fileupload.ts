@@ -17,7 +17,7 @@ export async function uploadFile(file: File[], id: string) {
       console.log(error);
     } else {
       // Handle success
-      console.log("File upload successfully");
+      return null;
     }
   }
 }
@@ -34,8 +34,6 @@ export async function getFile(_id: string) {
     const url = `https://ixgnekopnrhcnlbozxtv.supabase.co/storage/v1/object/public/Images/${_id}/${name}`;
     return { url, id };
   });
-
-  console.log(newData);
 
   return newData;
 }

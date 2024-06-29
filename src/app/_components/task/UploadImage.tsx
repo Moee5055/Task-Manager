@@ -1,15 +1,17 @@
 "use client";
 import { FileButton, Button, Group, Text } from "@mantine/core";
 import { FaImage } from "react-icons/fa6";
-import useFileState from "@/store/useImage";
 import { uploadFile } from "@/utils/fileupload";
+import { useRouter } from "next/navigation";
 
 export function ImageUpload({ id }: { id: string }) {
+  const router = useRouter();
   async function handleFileChange(selectedFile: File[] | null) {
     if (selectedFile) {
       try {
         const file = selectedFile;
         await uploadFile(file, id);
+        router.refresh();
       } catch (err) {
         console.log(err);
       }

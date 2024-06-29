@@ -15,7 +15,6 @@ import { CreateTaskSchema } from "@/schema/CreateTaskSchema";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { DialogClose } from "@/components/ui/dialog";
-import { getFile } from "@/utils/fileupload";
 
 type Task = {
   id: string;
@@ -34,10 +33,14 @@ type FileObject = {
   url: string;
 };
 
-const EditModal = ({ id }: { id: string }) => {
+const EditModal = ({
+  id,
+  children,
+}: {
+  id: string;
+  children: React.ReactNode;
+}) => {
   const [data, setData] = useState<Task | null>(null);
-  const [fileDataFetched, setFileDataFetched] = useState(false);
-  const [images, setImages] = useState<FileObject[] | undefined>([]);
 
   const form = useForm<z.infer<typeof CreateTaskSchema>>({
     resolver: zodResolver(CreateTaskSchema),
@@ -112,27 +115,13 @@ const EditModal = ({ id }: { id: string }) => {
     getTask();
   }, [id, form]);
 
-  // useEffect(() => {
-  //   async function fetchUploadFile() {
-  //     if (!fileDataFetched) {
-  //       try {
-  //         const data = await getFile(id);
-  //         setFileDataFetched(true);
-  //         setImages(data);
-  //       } catch (error) {
-  //         console.error("Error fetching file:", error);
-  //       }
-  //     }
-  //   }
-  //   fetchUploadFile();
-  // }, [id, fileDataFetched]);
-
   return (
     <>
       <Form {...form}>
         <form
           className="space-y-4 sm:space-y-6"
           onSubmit={form.handleSubmit(onSubmit)}>
+          {children}
           <div className="space-y-3 sm:space-y-4">
             <FormField
               control={form.control}
