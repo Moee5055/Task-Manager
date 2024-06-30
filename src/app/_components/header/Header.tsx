@@ -6,9 +6,13 @@ import { Input } from "@/components/ui/input";
 import { FaBars } from "react-icons/fa";
 import { IoSearch } from "react-icons/io5";
 import { useToggleStore } from "@/store/useStore";
+import { useEffect, useState } from "react";
+import { getTasks } from "@/actions/action";
+import { useSearchStore } from "@/store/useSearch";
 
 const Header = () => {
-  const visible = useToggleStore((state) => state.visibile);
+  const { search, setSearch } = useSearchStore((state) => state);
+
   const setVisible = useToggleStore((state) => state.updateVisile);
 
   return (
@@ -36,6 +40,8 @@ const Header = () => {
           className="bg-secondary rounded-sm py-2 px-3 text-muted-foreground
            dark:bg-background/50 w-full"
           placeholder="search ..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
         />
         <IoSearch className="h-5 w-5 relative right-7 text-muted-foreground" />
       </div>

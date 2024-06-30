@@ -16,7 +16,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { DialogClose } from "@/components/ui/dialog";
 
-type Task = {
+export type Task = {
   id: string;
   title: string;
   desc: string | null;

@@ -41,12 +41,6 @@ const links: Link[] = [
     link: "Important",
     icon: <TbPinnedFilled className="h-5 w-5" />,
   },
-  {
-    id: 4,
-    href: "/images",
-    link: "Images",
-    icon: <FaImage className="h-5 w-5" />,
-  },
 ];
 
 const Links = () => {

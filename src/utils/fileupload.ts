@@ -17,7 +17,7 @@ export async function uploadFile(file: File[], id: string) {
       console.log(error);
     } else {
       // Handle success
-      return null;
+      console.log("file upload");
     }
   }
 }
@@ -36,4 +36,30 @@ export async function getFile(_id: string) {
   });
 
   return newData;
+}
+
+export async function deleteFile(id: string) {
+  const { data, error } = await supabase.storage.from("Images").list(id);
+  if (error) {
+    console.error("Error listing files in folder:", error);
+    return null;
+  }
+
+  if (data.length < 1) {
+    return null;
+  }
+
+  if (data) {
+    const filesToDelete = data.map((file) => `${id}/${file.name}`);
+    const { error: deleteError } = await supabase.storage
+      .from("Images")
+      .remove(filesToDelete);
+
+    if (deleteError) {
+      console.error("Error deleting files in folder:", deleteError);
+      return null;
+    }
+  }
+
+  return true;
 }

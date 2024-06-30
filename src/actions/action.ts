@@ -3,6 +3,7 @@ import prisma from "@/db";
 import { z } from "zod";
 import { CreateTaskSchema } from "@/schema/CreateTaskSchema";
 import { revalidatePath } from "next/cache";
+import { deleteFile } from "@/utils/fileupload";
 
 type UpdateTask = {
   id: string;
@@ -92,10 +93,30 @@ export async function deleteTask(id: string) {
     },
   });
 
+  await deleteFile(id);
+
   if (!result) {
     return { message: "Error deleting Task" };
   }
 
   revalidatePath("/tasks");
   return { message: "Succesfully Task Deleted" };
+}
+
+export async function searchTask(searchTerm: string) {
+  if (searchTerm === "") {
+    return [];
+  }
+  try {
+    const result = await prisma.task.findMany({
+      where: {
+        title: {
+          contains: searchTerm,
+        },
+      },
+    });
+    return result;
+  } catch (err) {
+    console.log("error : ", err);
+  }
 }
