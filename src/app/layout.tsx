@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { MantineProvider } from "@mantine/core";
+import NextTopLoader from "nextjs-toploader";
 
 import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
@@ -23,7 +24,10 @@ export default function RootLayout({
         <html lang="en" suppressHydrationWarning={true}>
           <head />
           <body className={font.className}>
-            <MantineProvider>{children}</MantineProvider>
+            <MantineProvider>
+              <NextTopLoader showSpinner={false} />
+              {children}
+            </MantineProvider>
           </body>
         </html>
       </ClerkProvider>
