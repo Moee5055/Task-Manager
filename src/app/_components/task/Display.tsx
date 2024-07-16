@@ -16,19 +16,25 @@ import { Button } from "@/components/ui/button";
 import { useSearchStore } from "@/store/useSearch";
 import { useEffect, useState } from "react";
 import { searchTask } from "@/actions/action";
+import { useRouter, usePathname } from "next/navigation";
 
 import { Task } from "./EditModal";
 import { SkeletonCard } from "@/components/loading";
 import { Skeleton } from "@/components/ui/skeleton";
 
-const DispalyEditModal = dynamic(() => import("./DisplayIEditModal"), {
-  ssr: false,
-});
-
-const DisplayTask = ({ data }: { data: Task[] }) => {
+const DisplayTask = ({
+  data,
+  children,
+}: {
+  data: Task[];
+  children: React.ReactNode;
+}) => {
   const { search } = useSearchStore((state) => state);
   const [searchData, setSearchData] = useState<Task[] | undefined>([]);
   const [isSearching, setIsSearching] = useState(false);
+
+  const router = useRouter();
+  const path = usePathname();
 
   useEffect(() => {
     setIsSearching(true);
@@ -86,7 +92,12 @@ const DisplayTask = ({ data }: { data: Task[] }) => {
             return (
               <Dialog key={id}>
                 <DialogTrigger asChild>
-                  <Card className="flex flex-col bg-background/50 text-muted-foreground text-sm sm:text-md">
+                  <Card
+                    className="flex flex-col bg-background/50 text-muted-foreground text-sm sm:text-md"
+                    onClick={() => {
+                      router.replace(`${path}?id=${id}`);
+                      console.log(`${path}?id=${id}`);
+                    }}>
                     <CardHeader>
                       <CardTitle className="flex justify-between items-center">
                         {title}
@@ -113,7 +124,7 @@ const DisplayTask = ({ data }: { data: Task[] }) => {
                   </Card>
                 </DialogTrigger>
                 <DialogContent className="w-[90vw] sm:max-w-md md:max-w-lg">
-                  <DispalyEditModal id={id} />
+                  {children}
                 </DialogContent>
               </Dialog>
             );

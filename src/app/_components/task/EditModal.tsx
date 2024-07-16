@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
@@ -31,11 +32,11 @@ export type Task = {
 const EditModal = ({
   task,
   id,
-  children,
+  imageData,
 }: {
   task: Task;
   id: string;
-  children: React.ReactNode;
+  imageData?: any;
 }) => {
   const [data, setData] = useState<Task | null>(null);
 
@@ -108,7 +109,21 @@ const EditModal = ({
         <form
           className="space-y-4 sm:space-y-6"
           onSubmit={form.handleSubmit(onSubmit)}>
-          {children}
+          {imageData?.length > 0 && (
+            <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-4 p-4">
+              {imageData.map((img, index) => (
+                <div key={index} className="relative aspect-square">
+                  <Image
+                    src={img.url}
+                    alt={img.id}
+                    fill
+                    className="rounded-lg object-cover"
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                  />
+                </div>
+              ))}
+            </div>
+          )}
           <div className="space-y-3 sm:space-y-4">
             <FormField
               control={form.control}
