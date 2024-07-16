@@ -10,6 +10,14 @@ const nextConfig = {
       },
     ],
   },
+  experimental: {
+    serverActions: {
+      allowedOrigins: [
+        "https://9bk90r20-3000.inc1.devtunnels.ms/",
+        "localhost:3000",
+      ],
+    },
+  },
 };
 
 export default nextConfig;

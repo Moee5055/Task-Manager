@@ -2,6 +2,7 @@ import { getFile } from "@/utils/fileupload";
 import EditModal from "./EditModal";
 import Image from "next/image";
 import { Suspense } from "react";
+import { getTaskById } from "@/actions/action";
 
 async function fetchUploadFile(id: string) {
   try {
@@ -12,24 +13,33 @@ async function fetchUploadFile(id: string) {
   }
 }
 
+async function getTask(id: string) {
+  try {
+    const result = await getTaskById(id);
+    if (!result) {
+      return null;
+    }
+    return result;
+  } catch (err) {
+    console.error("Error fetching data: ", err);
+  }
+}
+
 const DispalyEditModal = async ({ id }: { id: string }) => {
   const data = await fetchUploadFile(id);
+  const task = await getTask(id);
 
-  if (!data) {
-    return null;
-  }
-
-  if (data?.length < 0) {
+  if (!data || !task) {
     return null;
   }
 
   return (
-    <EditModal id={id}>
-      {data?.length > 0 && (
-        <Suspense fallback={<div>...Loading</div>}>
+    <Suspense fallback={<div>...Loading</div>}>
+      <EditModal task={task} id={id}>
+        {data?.length > 0 && (
           <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-4 p-4">
-            {data.map((img) => (
-              <div key={img.id} className="relative aspect-square">
+            {data.map((img, index) => (
+              <div key={index} className="relative aspect-square">
                 <Image
                   src={img.url}
                   alt={img.id}
@@ -40,9 +50,9 @@ const DispalyEditModal = async ({ id }: { id: string }) => {
               </div>
             ))}
           </div>
-        </Suspense>
-      )}
-    </EditModal>
+        )}
+      </EditModal>
+    </Suspense>
   );
 };
 

@@ -1,9 +1,7 @@
 "use client";
 
-import { useAuth } from "@clerk/nextjs";
-import { useUser } from "@clerk/nextjs";
+import { useAuth, useUser, UserButton } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
-import { UserButton } from "@clerk/nextjs";
 
 const AvatarComponent = () => {
   const { userId } = useAuth();
@@ -17,7 +15,7 @@ const AvatarComponent = () => {
   return (
     <>
       <div
-        className="flex justify-center items-center w-[140px] sm:w-[160px] md:w-[200px] mx-auto py-3
+        className="flex justify-center items-center w-[50vw] max-sm:w-[30vw] mx-auto py-3
       px-4 bg-background/50 shadow-lg rounded-lg cursor-pointer">
         {userId ? (
           <div className="flex space-x-3 items-center">
@@ -27,11 +25,11 @@ const AvatarComponent = () => {
             </p>
           </div>
         ) : (
-          <p
+          <div
             className="cursor-pointer text-muted-foreground text-sm sm:text-md"
             onClick={handleClick}>
             Login / SignUp
-          </p>
+          </div>
         )}
       </div>
     </>

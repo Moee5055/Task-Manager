@@ -1,14 +1,14 @@
-import { getIncompleteTasks } from "@/actions/action";
+import { getTasks } from "@/actions/action";
 import AddTaskComponent from "@/app/_components/task/Addtask";
 import DisplayTask from "@/app/_components/task/Display";
 import DispalyEditModal from "@/app/_components/task/DisplayIEditModal";
 
-const Incomplete = async ({
+const Important = async ({
   searchParams,
 }: {
   searchParams: { id: string };
 }) => {
-  const data = await getIncompleteTasks(false);
+  const data = await getTasks(true);
   const id = searchParams.id;
 
   return (
@@ -21,4 +21,4 @@ const Incomplete = async ({
   );
 };
 
-export default Incomplete;
+export default Important;

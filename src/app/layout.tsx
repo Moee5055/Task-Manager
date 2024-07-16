@@ -2,13 +2,10 @@ import type { Metadata } from "next";
 import { MantineProvider } from "@mantine/core";
 
 import "./globals.css";
-import {
-  ClerkProvider,
-  SignInButton,
-  SignedIn,
-  SignedOut,
-  UserButton,
-} from "@clerk/nextjs";
+import { ClerkProvider } from "@clerk/nextjs";
+import { Poppins } from "next/font/google";
+
+const font = Poppins({ subsets: ["latin"], weight: ["600"] });
 
 export const metadata: Metadata = {
   title: "Task Manager",
@@ -25,7 +22,7 @@ export default function RootLayout({
       <ClerkProvider>
         <html lang="en" suppressHydrationWarning={true}>
           <head />
-          <body>
+          <body className={font.className}>
             <MantineProvider>{children}</MantineProvider>
           </body>
         </html>

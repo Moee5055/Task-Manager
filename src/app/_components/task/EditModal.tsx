@@ -28,15 +28,12 @@ export type Task = {
   isCompleted: boolean;
 };
 
-type FileObject = {
-  id: string;
-  url: string;
-};
-
 const EditModal = ({
+  task,
   id,
   children,
 }: {
+  task: Task;
   id: string;
   children: React.ReactNode;
 }) => {
@@ -90,30 +87,20 @@ const EditModal = ({
 
   useEffect(() => {
     async function getTask() {
-      try {
-        const result = await getTaskById(id);
-        if (!result) {
-          return null;
-        }
-        setData(result);
-        form.reset({
-          title: result.title,
-          description: result.desc || "",
-          date: {
-            from: result.from,
-            to: result.to,
-          },
-          completed: result.isCompleted,
-          important: result.isImportant,
-        });
-      } catch (err) {
-        console.error("Error fetching data: ", err);
-        setData(null);
-      }
+      setData(task);
+      form.reset({
+        title: task.title,
+        description: task.desc || "",
+        date: {
+          from: task.from,
+          to: task.to,
+        },
+        completed: task.isCompleted,
+        important: task.isImportant,
+      });
     }
-
     getTask();
-  }, [id, form]);
+  }, [id, task, form]);
 
   return (
     <>

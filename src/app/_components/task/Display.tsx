@@ -8,24 +8,34 @@ import {
 } from "@/components/ui/card";
 import { DeleteIcon } from "./DeleteIcon";
 import PinnedComponent from "./Pinned";
-import { Skeleton } from "@/components/ui/skeleton";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Suspense } from "react";
-import DispalyEditModal from "./DisplayIEditModal";
-import { Task } from "./EditModal";
 import { useSearchStore } from "@/store/useSearch";
 import { useEffect, useState } from "react";
 import { searchTask } from "@/actions/action";
+import { useRouter, usePathname, useParams } from "next/navigation";
+
+import { Task } from "./EditModal";
+import { SkeletonCard } from "@/components/loading";
+import DispalyEditModal from "@/app/_components/task/DisplayIEditModal";
 
 const DisplayTask = ({ data }: { data: Task[] }) => {
   const { search } = useSearchStore((state) => state);
   const [searchData, setSearchData] = useState<Task[] | undefined>([]);
+  const [isSearching, setIsSearching] = useState(false);
+  const router = useRouter();
+  const path = usePathname();
+
+  const params = useParams();
+
   useEffect(() => {
+    setIsSearching(true);
     const tid = setTimeout(() => {
       async function searchByTitle() {
         const result = await searchTask(search);
         setSearchData(result);
+        setIsSearching(false);
       }
       searchByTitle();
     }, 500);
@@ -35,17 +45,20 @@ const DisplayTask = ({ data }: { data: Task[] }) => {
     };
   }, [search]);
 
-  if (data.length < 1) {
-  }
-
-  if (!searchData) {
-    return null;
-  }
-
-  if (search.length > 0 && searchData.length < 1) {
+  if (isSearching) {
     return (
       <div className="flex justify-center items-center pt-10 sm:pt-40">
-        <h1 className="font-bold text-2xl">No Tasks to Show</h1>
+        <h1 className="font-bold text-2xl">Searching...</h1>
+      </div>
+    );
+  }
+
+  const tasksToDisplay = search ? searchData : data;
+
+  if (tasksToDisplay?.length === 0) {
+    return (
+      <div className="flex justify-center items-center pt-10 sm:pt-40">
+        <h1 className="font-bold text-2xl">No Tasks Found</h1>
       </div>
     );
   }
@@ -60,13 +73,17 @@ const DisplayTask = ({ data }: { data: Task[] }) => {
           <div className="h-1 sm:[50px] sm:w-[70px] bg-muted-foreground rounded-lg"></div>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-4 pt-2">
-          <Suspense fallback={<Skeleton />}>
-            {(searchData?.length > 0 ? searchData : data).map((singleTask) => {
+          <Suspense fallback={<SkeletonCard />}>
+            {tasksToDisplay?.map((singleTask) => {
               const { id, title, desc, isCompleted, isImportant } = singleTask;
               return (
                 <Dialog key={id}>
                   <DialogTrigger asChild>
-                    <Card className="flex flex-col bg-background/50 text-muted-foreground text-sm sm:text-md">
+                    <Card
+                      className="flex flex-col bg-background/50 text-muted-foreground text-sm sm:text-md"
+                      onClick={() => {
+                        router.replace(`${path}?id=${id}`);
+                      }}>
                       <CardHeader>
                         <CardTitle className="flex justify-between items-center">
                           {title}

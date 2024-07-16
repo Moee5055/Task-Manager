@@ -1,14 +1,17 @@
 "use client";
 
-import { useToggleStore } from "@/store/useStore";
-import AvatarComponent from "./Avatar";
+import dynamic from "next/dynamic";
+import ToogleButton from "./ToogleSideBar";
 import Links from "./Links";
 
-type AsideProps = {
-  children: React.ReactNode;
-};
+const AvatarComponent = dynamic(
+  () => import("@/app/_components/sidebar/Avatar"),
+  { ssr: false }
+);
 
-const Aside = ({ children }: AsideProps) => {
+import { useToggleStore } from "@/store/useStore";
+
+const Aside = () => {
   const visible = useToggleStore((state) => state.visibile);
 
   return (
@@ -17,7 +20,13 @@ const Aside = ({ children }: AsideProps) => {
         pt-6 pb-4 sm:relative sm:w-[30vw] sm:h-full sm:max-w-[250px] sm:min-w-[200px] sm:flex sm:flex-col space-y-7 
         sm:bg-zinc-300/50 dark:bg-secondary sm:rounded-lg
     ${visible ? "flex flex-col" : "hidden"}`}>
-      {children}
+      <div className="flex justify-center px-4">
+        <AvatarComponent />
+        <ToogleButton />
+      </div>
+      <div className="flex-1 place-content-center">
+        <Links />
+      </div>
     </aside>
   );
 };

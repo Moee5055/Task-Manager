@@ -44,15 +44,42 @@ export async function createTask(data: z.infer<typeof CreateTaskSchema>) {
   return { message: "success" };
 }
 
-export async function getTasks() {
+export async function getTasks(isImportant?: boolean) {
+  if (isImportant) {
+    const data = await prisma.task.findMany({
+      where: {
+        isImportant,
+      },
+    });
+    return data;
+  }
+
   const data = await prisma.task.findMany();
   return data;
 }
 
-export async function getTaskById(id: string) {
-  const data = await prisma.task.findUnique({
+export async function getIncompleteTasks(isCompleted: boolean) {
+  if (isCompleted) {
+    const data = await prisma.task.findMany({
+      where: {
+        isCompleted: true,
+      },
+    });
+    return data;
+  }
+
+  const data = await prisma.task.findMany({
     where: {
-      id,
+      isCompleted: false,
+    },
+  });
+  return data;
+}
+
+export async function getTaskById(id: string) {
+  const data = await prisma.task.findFirst({
+    where: {
+      id: id,
     },
   });
   if (!data) {
