@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 
 export function ImageUpload({ id }: { id: string }) {
   const router = useRouter();
+
   async function handleFileChange(selectedFile: File[] | null) {
     if (selectedFile) {
       try {

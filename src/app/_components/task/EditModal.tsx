@@ -9,7 +9,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { IoMdColorFill } from "react-icons/io";
 import { ImageUpload } from "./UploadImage";
 import { TbPinnedFilled } from "react-icons/tb";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { getTaskById, updateTask } from "@/actions/action";
 import { format, parseISO } from "date-fns";
 import { CreateTaskSchema } from "@/schema/CreateTaskSchema";
@@ -111,7 +111,7 @@ const EditModal = ({
           onSubmit={form.handleSubmit(onSubmit)}>
           {imageData?.length > 0 && (
             <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-4 p-4">
-              {imageData.map((img, index) => (
+              {imageData.map((img: any, index: number) => (
                 <div key={index} className="relative aspect-square">
                   <Image
                     src={img.url}
@@ -194,7 +194,9 @@ const EditModal = ({
           </div>
           <div className="flex justify-between items-center">
             <div className="flex space-x-3 items-center">
-              <ImageUpload id={id} />
+              <Suspense fallback={<div>Loading...</div>}>
+                <ImageUpload id={id} />
+              </Suspense>
               <IoMdColorFill className="h-6 w-6 text-muted-foreground relative -top-[2px]" />
               <FormField
                 control={form.control}

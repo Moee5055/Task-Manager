@@ -1,7 +1,34 @@
+import dynamic from "next/dynamic";
+
 import { getTasks } from "@/actions/action";
 
-import DisplayTask from "./Display";
-import EditModal from "./EditModal";
+import { SkeletonCard } from "@/components/loading";
+import { Skeleton } from "@/components/ui/skeleton";
+
+const DisplayTask = dynamic(() => import("./Display"), {
+  ssr: false,
+  loading: () => (
+    <>
+      <div className="px-10">
+        <Skeleton className="h-6 w-[100px]" />
+      </div>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-10 px-10">
+        <SkeletonCard />
+        <SkeletonCard />
+        <SkeletonCard />
+      </div>
+    </>
+  ),
+});
+
+const EditModal = dynamic(() => import("./EditModal"), {
+  ssr: false,
+  loading: () => (
+    <div className="h-full flex justify-center items-center text-4xl">
+      Loading...
+    </div>
+  ),
+});
 
 import { getFile } from "@/utils/fileupload";
 import { getTaskById } from "@/actions/action";

@@ -1,7 +1,6 @@
 import { getIncompleteTasks } from "@/actions/action";
 import AddTaskComponent from "@/app/_components/task/Addtask";
 import DisplayTask from "@/app/_components/task/Display";
-import DispalyEditModal from "@/app/_components/task/DisplayIEditModal";
 
 const Incomplete = async ({
   searchParams,
@@ -14,9 +13,6 @@ const Incomplete = async ({
   return (
     <section className="flex flex-col pt-6 space-y-8 ">
       <AddTaskComponent />
-      <DisplayTask data={data}>
-        <DispalyEditModal id={id} />
-      </DisplayTask>
     </section>
   );
 };

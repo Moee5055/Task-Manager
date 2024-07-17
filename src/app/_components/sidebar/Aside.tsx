@@ -3,10 +3,14 @@
 import dynamic from "next/dynamic";
 import ToogleButton from "./ToogleSideBar";
 import Links from "./Links";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const AvatarComponent = dynamic(
   () => import("@/app/_components/sidebar/Avatar"),
-  { ssr: false }
+  {
+    ssr: false,
+    loading: () => <Skeleton className="w-full h-[50px]" />,
+  }
 );
 
 import { useToggleStore } from "@/store/useStore";
