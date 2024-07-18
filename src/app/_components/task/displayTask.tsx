@@ -5,6 +5,11 @@ import { getTasks } from "@/actions/action";
 import { SkeletonCard } from "@/components/loading";
 import { Skeleton } from "@/components/ui/skeleton";
 
+const EditModal = dynamic(() => import("./EditModal"), {
+  ssr: false,
+  loading: () => <div>Loading....</div>,
+});
+
 const DisplayTask = dynamic(() => import("./Display"), {
   ssr: false,
   loading: () => (
@@ -18,15 +23,6 @@ const DisplayTask = dynamic(() => import("./Display"), {
         <SkeletonCard />
       </div>
     </>
-  ),
-});
-
-const EditModal = dynamic(() => import("./EditModal"), {
-  ssr: false,
-  loading: () => (
-    <div className="h-full flex justify-center items-center text-4xl">
-      Loading...
-    </div>
   ),
 });
 

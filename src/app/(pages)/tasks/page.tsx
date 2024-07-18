@@ -1,5 +1,6 @@
 import AddTaskComponent from "@/app/_components/task/Addtask";
 import DisplayAllTask from "@/app/_components/task/displayTask";
+import { Suspense } from "react";
 
 const Tasks = ({
   searchParams,

@@ -4,15 +4,22 @@ import { FaImage } from "react-icons/fa6";
 import { uploadFile } from "@/utils/fileupload";
 import { useRouter } from "next/navigation";
 
-export function ImageUpload({ id }: { id: string }) {
+type Props = {
+  id: string;
+  setIsLoading: (isLoading: boolean) => void;
+};
+
+export function ImageUpload({ id, setIsLoading }: Props) {
   const router = useRouter();
 
   async function handleFileChange(selectedFile: File[] | null) {
     if (selectedFile) {
       try {
+        setIsLoading(true);
         const file = selectedFile;
         await uploadFile(file, id);
         router.refresh();
+        setIsLoading(false);
       } catch (err) {
         console.log(err);
       }

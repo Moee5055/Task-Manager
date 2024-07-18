@@ -39,7 +39,7 @@ const EditModal = ({
   imageData?: any;
 }) => {
   const [data, setData] = useState<Task | null>(null);
-
+  const [isLoading, setIsLoading] = useState(false);
   const form = useForm<z.infer<typeof CreateTaskSchema>>({
     resolver: zodResolver(CreateTaskSchema),
     defaultValues: {
@@ -106,6 +106,11 @@ const EditModal = ({
   return (
     <>
       <Form {...form}>
+        {isLoading && (
+          <div className="absolute top-0 left-0 right-0 bottom-0">
+            <div className="absolute top-0 left-0 right-0 bottom-0 bg-white opacity-60"></div>
+          </div>
+        )}
         <form
           className="space-y-4 sm:space-y-6"
           onSubmit={form.handleSubmit(onSubmit)}>
@@ -194,9 +199,7 @@ const EditModal = ({
           </div>
           <div className="flex justify-between items-center">
             <div className="flex space-x-3 items-center">
-              <Suspense fallback={<div>Loading...</div>}>
-                <ImageUpload id={id} />
-              </Suspense>
+              <ImageUpload id={id} setIsLoading={setIsLoading} />
               <IoMdColorFill className="h-6 w-6 text-muted-foreground relative -top-[2px]" />
               <FormField
                 control={form.control}
