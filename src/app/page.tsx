@@ -1,4 +1,11 @@
+import type { Metadata } from "next";
+
 import { UserButton } from "@clerk/nextjs";
+
+export const metadata: Metadata = {
+  title: "Task App",
+  description: "create and manage your task",
+};
 
 export default function Home() {
   return (

@@ -6,8 +6,6 @@ import { Input } from "@/components/ui/input";
 import { FaBars } from "react-icons/fa";
 import { IoSearch } from "react-icons/io5";
 import { useToggleStore } from "@/store/useStore";
-import { useEffect, useState } from "react";
-import { getTasks } from "@/actions/action";
 import { useSearchStore } from "@/store/useSearch";
 
 const Header = () => {

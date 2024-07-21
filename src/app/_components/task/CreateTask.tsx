@@ -19,6 +19,7 @@ import { DatePickerWithRange } from "@/app/_components/DateRangePicker";
 import { CreateTaskSchema } from "@/schema/CreateTaskSchema";
 import { Textarea } from "@/components/ui/textarea";
 import { createTask } from "@/actions/action";
+import { toast } from "react-hot-toast";
 
 type FormData = z.infer<typeof CreateTaskSchema>;
 
@@ -43,6 +44,7 @@ export function MyForm({ onClose }: { onClose: () => void }) {
     try {
       const result = await createTask(data);
       if (result?.message === "success") {
+        toast.success("Task created successfully");
         onClose();
       }
     } catch (error) {

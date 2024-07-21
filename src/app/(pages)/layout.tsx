@@ -2,6 +2,8 @@ import SideBar from "../_components/sidebar/Aside";
 import Header from "../_components/header/Header";
 import { ThemeProvider } from "../theme_provider";
 
+import type { Metadata } from "next";
+
 export default function RootLayout({
   children,
 }: Readonly<{

@@ -1,17 +1,14 @@
 import dynamic from "next/dynamic";
 
-import { getTasks } from "@/actions/action";
-
 import { SkeletonCard } from "@/components/loading";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Task } from "./EditModal";
 
 const EditModal = dynamic(() => import("./EditModal"), {
-  ssr: false,
-  loading: () => <div>Loading....</div>,
+  loading: () => <Skeleton className="w-full h-[50px]" />,
 });
 
 const DisplayTask = dynamic(() => import("./Display"), {
-  ssr: false,
   loading: () => (
     <>
       <div className="px-10">
@@ -52,10 +49,13 @@ async function getTask(id: string) {
 
 const DisplayAllTask = async ({
   searchParams,
+  status,
+  data,
 }: {
   searchParams: { id: string | undefined };
+  status: string;
+  data: Task[];
 }) => {
-  const allTask = await getTasks();
   const id = searchParams?.id;
   let image, task;
 
@@ -66,7 +66,7 @@ const DisplayAllTask = async ({
 
   return (
     <>
-      <DisplayTask data={allTask}>
+      <DisplayTask data={data} status={status}>
         {id && task && <EditModal task={task} id={id} imageData={image} />}
       </DisplayTask>
     </>

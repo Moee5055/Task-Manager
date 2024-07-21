@@ -9,13 +9,16 @@ import { Textarea } from "@/components/ui/textarea";
 import { IoMdColorFill } from "react-icons/io";
 import { ImageUpload } from "./UploadImage";
 import { TbPinnedFilled } from "react-icons/tb";
-import { Suspense, useEffect, useState } from "react";
-import { getTaskById, updateTask } from "@/actions/action";
+import { useEffect, useState } from "react";
+import { updateTask } from "@/actions/action";
 import { format, parseISO } from "date-fns";
 import { CreateTaskSchema } from "@/schema/CreateTaskSchema";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { DialogClose } from "@/components/ui/dialog";
+import { MdUpload } from "react-icons/md";
+
+import { toast } from "react-hot-toast";
 
 export type Task = {
   id: string;
@@ -55,7 +58,24 @@ const EditModal = ({
   });
 
   const onSubmit = async (values: z.infer<typeof CreateTaskSchema>) => {
-    await updateTask({ id, values });
+    const myPromise = updateTask({ id, values });
+    toast.promise(
+      myPromise,
+      {
+        loading: "Loading",
+        success: `Task Updated`,
+        error: (err) => `This just happened: ${err.toString()}`,
+      },
+      {
+        style: {
+          minWidth: "250px",
+        },
+        success: {
+          duration: 5000,
+          icon: "✅",
+        },
+      }
+    );
   };
 
   const formatDate = (date: Date | string) => {
@@ -105,12 +125,15 @@ const EditModal = ({
 
   return (
     <>
+      {isLoading && (
+        <div className="absolute inset-0 bg-black/80 grid place-items-center z-50">
+          <h2 className="flex items-center space-x-3 text-3xl">
+            <MdUpload className="size-6 text-white" />
+            <span>Uploading ....</span>
+          </h2>
+        </div>
+      )}
       <Form {...form}>
-        {isLoading && (
-          <div className="absolute top-0 left-0 right-0 bottom-0">
-            <div className="absolute top-0 left-0 right-0 bottom-0 bg-white opacity-60"></div>
-          </div>
-        )}
         <form
           className="space-y-4 sm:space-y-6"
           onSubmit={form.handleSubmit(onSubmit)}>

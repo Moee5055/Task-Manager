@@ -19,36 +19,52 @@ import { useRouter, usePathname } from "next/navigation";
 import { Task } from "./EditModal";
 import { SkeletonCard } from "@/components/loading";
 import { Skeleton } from "@/components/ui/skeleton";
+import { ImSpinner8 } from "react-icons/im";
 
 const DisplayTask = ({
   data,
   children,
+  status,
 }: {
   data: Task[];
   children: React.ReactNode;
+  status: string;
 }) => {
   const { search } = useSearchStore((state) => state);
   const [searchData, setSearchData] = useState<Task[] | undefined>([]);
   const [isSearching, setIsSearching] = useState(false);
+  const [loadingTaskId, setLoadingTaskId] = useState<string | null>(null);
+  const [openDialogId, setOpenDialogId] = useState<string | null>(null);
 
   const router = useRouter();
   const path = usePathname();
 
   useEffect(() => {
-    setIsSearching(true);
-    const tid = setTimeout(() => {
-      async function searchByTitle() {
-        const result = await searchTask(search);
-        setSearchData(result);
-        setIsSearching(false);
-      }
-      searchByTitle();
-    }, 500);
+    if (search) {
+      setIsSearching(true);
+      const tid = setTimeout(() => {
+        async function searchByTitle() {
+          const result = await searchTask(search);
+          setSearchData(result);
+          setIsSearching(false);
+        }
+        searchByTitle();
+      }, 1000);
 
-    return () => {
-      clearTimeout(tid);
-    };
+      return () => {
+        clearTimeout(tid);
+      };
+    }
   }, [search]);
+
+  const handleClick = (id: string) => {
+    setLoadingTaskId(id);
+    router.replace(`${path}?id=${id}`);
+    setTimeout(() => {
+      setLoadingTaskId(null);
+      setOpenDialogId(id);
+    }, 1000);
+  };
 
   if (isSearching) {
     return (
@@ -80,7 +96,7 @@ const DisplayTask = ({
       <div className="flex flex-col space-y-3 px-4">
         <div className="space-y-1 relative left-2">
           <h1 className="text-lg sm:text-xl font-bold text-muted-foreground">
-            All Tasks
+            {status}
           </h1>
           <div className="h-1 sm:[50px] sm:w-[70px] bg-muted-foreground rounded-lg"></div>
         </div>
@@ -88,42 +104,53 @@ const DisplayTask = ({
           {tasksToDisplay?.map((singleTask) => {
             const { id, title, desc, isCompleted, isImportant } = singleTask;
             return (
-              <Dialog key={id}>
-                <DialogTrigger asChild>
-                  <Card
-                    className="flex flex-col bg-background/50 text-muted-foreground text-sm sm:text-md"
-                    onClick={() => {
-                      router.replace(`${path}?id=${id}`);
-                      console.log(`${path}?id=${id}`);
-                    }}>
-                    <CardHeader>
-                      <CardTitle className="flex justify-between items-center">
-                        {title}
-                        <PinnedComponent completed={isImportant} />
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent className="flex-1">
-                      <p className="break-words whitespace-normal">
-                        {desc && desc.length > 25
-                          ? `${desc.slice(0, 25)} ...`
-                          : desc}
-                      </p>
-                    </CardContent>
-                    <CardFooter className="flex justify-between items-center">
-                      <Button
-                        size="sm"
-                        className={`${
-                          isCompleted ? "bg-emerald-500" : "bg-destructive"
-                        } tracking-wider dark:text-white dark:hover:bg-secondary`}>
-                        {isCompleted ? "completed" : "incomplete"}
-                      </Button>
-                      <DeleteIcon id={id} />
-                    </CardFooter>
-                  </Card>
-                </DialogTrigger>
-                <DialogContent className="w-[90vw] sm:max-w-md md:max-w-lg">
-                  {children}
-                </DialogContent>
+              <Dialog
+                key={id}
+                open={openDialogId === id}
+                onOpenChange={(isOpen) => {
+                  if (!isOpen) {
+                    setOpenDialogId(null);
+                  }
+                }}>
+                <Card
+                  className="flex flex-col bg-background/50 text-muted-foreground text-sm sm:text-md"
+                  onClick={() => handleClick(id)}>
+                  <CardHeader>
+                    <CardTitle className="flex justify-between items-center">
+                      {title}
+                      <PinnedComponent completed={isImportant} />
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="flex-1">
+                    <p className="break-words whitespace-normal">
+                      {desc && desc.length > 25
+                        ? `${desc.slice(0, 25)} ...`
+                        : desc}
+                    </p>
+                  </CardContent>
+                  <CardFooter className="flex justify-between items-center">
+                    <Button
+                      size="sm"
+                      className={`${
+                        isCompleted ? "bg-emerald-500" : "bg-destructive"
+                      } tracking-wider dark:text-white dark:hover:bg-secondary`}>
+                      {isCompleted ? "completed" : "incomplete"}
+                    </Button>
+                    <DeleteIcon id={id} />
+                  </CardFooter>
+                </Card>
+                {loadingTaskId === id ? (
+                  <div className="absolute inset-0 z-50 bg-black/90 grid place-items-center">
+                    <h2 className="text-4xl font-extrabold tracking-wider flex items-center space-x-5">
+                      <ImSpinner8 className="size-6 animate-spin text-white" />{" "}
+                      <span>Loading ....</span>
+                    </h2>
+                  </div>
+                ) : (
+                  <DialogContent className="w-[90vw] sm:max-w-md md:max-w-lg outline-none border-none">
+                    {children}
+                  </DialogContent>
+                )}
               </Dialog>
             );
           })}
